@@ -1,0 +1,52 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const apiUrl = 'https://api.jsonbin.io/v3/b/681953be8561e97a500e7925'; // Reemplaza con tu URL de JSONBin
+const apiKey = '$2a$10$/wLqY1wNeLVwYB5kWhkOBOd42sDd79L6ltW1I9WE4lxNkBYLN8uC'; // Reemplaza con tu clave API
+
+// Obtener los datos del JSONBin
+const response = await fetch(apiUrl, {
+  headers: {
+    'X-Master-Key': apiKey,
+  },
+});
+const data = await response.json();
+---
+
+
+<Layout>
+    <main class="p-8">
+      <!-- Usamos flex para crear las tarjetas una al lado de la otra -->
+      <div class="flex flex-wrap justify-start gap-4">
+        <!-- Sección de "Cosas que me gustan de ti" -->
+        <h2 class="text-xl font-semibold mb-4">Cosas que me gustan de ti</h2>
+        <div id="likes" class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+          
+          {Array.isArray(data.record.likes) ? (
+            data.record.likes.map((item) => (
+              <div class="bg-white rounded-lg shadow-lg p-6 max-w-sm mx-auto my-2 text-center">
+                <h2>{item}</h2>
+              </div>
+            ))
+          ) : (
+            <p>No se pudieron cargar los datos de "likes".</p>
+          )}
+        </div>
+  
+        <!-- Sección de "Cosas que me recuerdan a ti" -->
+        <h2 class="text-xl font-semibold mb-4">Cosas que me recuerdan a ti</h2>
+        <div id="reminders" class=" w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 text-center">
+          {Array.isArray(data.record.reminders) ? (
+            data.record.reminders.map((item) => (
+              <div class="bg-white rounded-lg shadow-lg p-6 max-w-sm mx-auto">
+                <h2>{item}</h2>
+              </div>
+            ))
+          ) : (
+            <p>No se pudieron cargar los datos de "reminders".</p>
+          )}
+        </div>
+      </div>
+    </main>
+  </Layout>
+  
