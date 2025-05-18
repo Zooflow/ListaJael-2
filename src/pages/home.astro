@@ -1,8 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Timer from '../components/Timer.astro';
+import '../styles/style.css';
 
-const apiUrl = 'https://api.jsonbin.io/v3/b/681953be8561e97a500e7925'; // Reemplaza con tu URL de JSONBin
-const apiKey = '$2a$10$/wLqY1wNeLVwYB5kWhkOBOd42sDd79L6ltW1I9WE4lxNkBYLN8uC'; // Reemplaza con tu clave API
+const apiUrl = 'https://api.jsonbin.io/v3/b/681953be8561e97a500e7925';
+const apiKey = '$2a$10$/wLqY1wNeLVwYB5kWhkOBOd42sDd79L6ltW1I9WE4lxNkBYLN8uC';
 
 // Obtener los datos del JSONBin
 const response = await fetch(apiUrl, {
@@ -11,35 +13,80 @@ const response = await fetch(apiUrl, {
   },
 });
 const data = await response.json();
+
+// Definir los emojis para cada elemento
+const likeEmojis = [
+  "👁️", "💋", "👃", "🧴", 
+  "🤲", "🌑", "😊", "😂", 
+  "💕", "👀", "🗣️", "💬",
+  "😳", "🦷"
+];
+
+const reminderEmojis = [
+  "🎷", "🌻", "🪨", "🍗",
+  "🎃", "🦡", "💼", "⛏️",
+  "🐭", "🍫", "🦈", "🪼",
+  "🏰", "💀"
+];
+
+// Función para obtener un color aleatorio suave
+function getRandomPastelColor() {
+  const pastelColors = [
+    "#FFD6E0", "#FFEFCF", "#D4F0F0", "#E2ECE9", 
+    "#F0E6EF", "#F9E2D2", "#DCE8F7", "#F0F0E2"
+  ];
+  return pastelColors[Math.floor(Math.random() * pastelColors.length)];
+}
 ---
 
-
 <Layout>
-    <main class="p-8">
-      <!-- Usamos flex para crear las tarjetas una al lado de la otra -->
-      <div class="flex flex-wrap justify-start gap-4">
-        <!-- Sección de "Cosas que me gustan de ti" -->
-        <h2 class="text-xl font-semibold mb-4">Cosas que me gustan de ti</h2>
-        <div id="likes" class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-          
+  <main class="p-8 bg-gradient-to-r from-pink-50 to-blue-50 min-h-screen">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-10">
+        <h1 class="text-3xl font-bold mb-2">
+          ❤️ <span class="text-shine">Mi rincón especial</span> ❤️
+        </h1>
+        <p class="text-gray-600 italic">Un lugar donde guardo todo lo que me enamora de ti</p>
+      </div>
+      
+      <!-- Sección de "Cosas que me gustan de ti" -->
+      <div class="mb-12">
+        <h2 class="text-2xl font-semibold mb-6 text-shine border-b-2 border-red-400 pb-2">
+          💖 Cosas que me gustan de ti
+        </h2>
+        
+        <div id="likes" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {Array.isArray(data.record.likes) ? (
-            data.record.likes.map((item) => (
-              <div class="bg-white rounded-lg shadow-lg p-6 max-w-sm mx-auto my-2 text-center">
-                <h2>{item}</h2>
+            data.record.likes.map((item, index) => (
+              <div 
+                class="bg-white rounded-xl shadow-lg p-6 transition-all duration-300 hover:shadow-xl hover:scale-105 transform"
+                style={`background-color: ${getRandomPastelColor()}`}
+              >
+                <div class="text-3xl mb-3">{likeEmojis[index] || "❤️"}</div>
+                <h3 class="text-lg font-medium text-gray-800">{item}</h3>
               </div>
             ))
           ) : (
             <p>No se pudieron cargar los datos de "likes".</p>
           )}
         </div>
-  
-        <!-- Sección de "Cosas que me recuerdan a ti" -->
-        <h2 class="text-xl font-semibold mb-4">Cosas que me recuerdan a ti</h2>
-        <div id="reminders" class=" w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 text-center">
+      </div>
+      
+      <!-- Sección de "Cosas que me recuerdan a ti" -->
+      <div class="mb-12">
+        <h2 class="text-2xl font-semibold mb-6 border-b-2 border-red-400 pb-2">
+          🌟 <span class="text-shine">Cosas que me recuerdan a ti</span>
+        </h2>
+        
+        <div id="reminders" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {Array.isArray(data.record.reminders) ? (
-            data.record.reminders.map((item) => (
-              <div class="bg-white rounded-lg shadow-lg p-6 max-w-sm mx-auto">
-                <h2>{item}</h2>
+            data.record.reminders.map((item, index) => (
+              <div 
+                class="bg-white rounded-xl shadow-lg p-6 transition-all duration-300 hover:shadow-xl hover:scale-105 transform"
+                style={`background-color: ${getRandomPastelColor()}`}
+              >
+                <div class="text-3xl mb-3">{reminderEmojis[index] || "✨"}</div>
+                <h3 class="text-lg font-medium text-gray-800">{item}</h3>
               </div>
             ))
           ) : (
@@ -47,6 +94,33 @@ const data = await response.json();
           )}
         </div>
       </div>
-    </main>
-  </Layout>
-  
+      
+      <div>
+        <h2 class="text-2xl font-semibold mb-6 border-b-2 border-red-400 pb-2">
+          🎉 <span class="text-shine">Nuestro aniversario</span>
+        </h2>
+        <div>
+          <Timer />
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Añadir animaciones de entrada
+    document.addEventListener('DOMContentLoaded', () => {
+      const cards = document.querySelectorAll('#likes > div, #reminders > div');
+      
+      cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+          card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, 100 * index);
+      });
+    });
+  </script>
+</Layout>

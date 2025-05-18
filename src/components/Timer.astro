@@ -1,0 +1,109 @@
+<div class="my-12 flex justify-center">
+    <div class="bg-white bg-opacity-80 backdrop-blur-sm rounded-2xl shadow-xl p-8 w-full max-w-2xl transform transition-all duration-500 hover:scale-105">
+      <h3 class="animated-text text-2xl font-bold mb-6">💘 Contando los días para nuestro aniversario 💘</h3>
+      
+      <div class="grid grid-cols-4 gap-4 mb-6">
+        <div class="bg-gradient-to-br from-pink-200 to-purple-100 rounded-lg p-4 shadow-md transform transition-all duration-300">
+          <div id="days" class="text-4xl font-bold text-purple-800">00</div>
+          <div class="text-sm text-purple-700 mt-1">Días</div>
+        </div>
+        <div class="bg-gradient-to-br from-blue-200 to-indigo-100 rounded-lg p-4 shadow-md transform transition-all duration-300">
+          <div id="hours" class="text-4xl font-bold text-indigo-800">00</div>
+          <div class="text-sm text-indigo-700 mt-1">Horas</div>
+        </div>
+        <div class="bg-gradient-to-br from-green-200 to-teal-100 rounded-lg p-4 shadow-md transform transition-all duration-300">
+          <div id="minutes" class="text-4xl font-bold text-teal-800">00</div>
+          <div class="text-sm text-teal-700 mt-1">Minutos</div>
+        </div>
+        <div class="bg-gradient-to-br from-yellow-200 to-amber-100 rounded-lg p-4 shadow-md transform transition-all duration-300">
+          <div id="seconds" class="text-4xl font-bold text-amber-800">00</div>
+          <div class="text-sm text-amber-700 mt-1">Segundos</div>
+        </div>
+      </div>
+      
+      <p id="celebration-message" class="text-lg text-center text-gray-700 italic hidden">
+        ¡Feliz aniversario mi osita! 🎉
+      </p>
+    </div>
+  </div>
+  
+  <style>
+    @keyframes celebrationAnimation {
+      0% { opacity: 0; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.1); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    
+    .celebration-active {
+      display: block !important;
+      animation: celebrationAnimation 1s ease-in-out forwards;
+    }
+    
+    .countdown-fade {
+      animation: fadeOut 1s ease-in-out forwards;
+    }
+    
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; height: 0; margin: 0; padding: 0; }
+    }
+  </style>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Aplicar delay de animación a cada caja del temporizador
+      const boxes = document.querySelectorAll('.pulse-animation');
+      boxes.forEach((box, index) => {
+        box.style.setProperty('--animation-order', index);
+      });
+      
+      // 1. Define la fecha objetivo (mes 9 = octubre, ya que los meses van de 0-11)
+      const targetDate = new Date(2025, 9, 4, 0, 0, 0);
+      
+      function updateTimer() {
+        // 2. Obtén la fecha actual
+        const currentDate = new Date();
+        
+        // 3. Calcula la diferencia en milisegundos
+        const timeDiff = targetDate - currentDate;
+        
+        // 4. Si la fecha ya pasó, muestra un mensaje de celebración
+        if (timeDiff <= 0) {
+          // Ocultar cajas del contador con animación
+          document.querySelector('.grid').classList.add('countdown-fade');
+          
+          // Mostrar mensaje de celebración con animación
+          const celebrationMsg = document.getElementById("celebration-message");
+          celebrationMsg.innerText = "🎉💖 ¡Feliz aniversario mi osita! 💗🎉";
+          celebrationMsg.classList.add('celebration-active');
+          
+          clearInterval(intervalId); // Para el temporizador
+          return;
+        }
+        
+        // 5. Convierte la diferencia a días, horas, minutos y segundos
+        const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+        
+        // 6. Actualiza el texto en el HTML con formato de dos dígitos
+        document.getElementById("days").innerText = days.toString().padStart(2, '0');
+        document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
+        document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
+        document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
+        
+        // Añadir un flash suave al cambiar los segundos
+        document.getElementById("seconds").parentElement.style.boxShadow = "0 0 15px rgba(245, 158, 11, 0.6)";
+        setTimeout(() => {
+          document.getElementById("seconds").parentElement.style.boxShadow = "";
+        }, 200);
+      }
+      
+      // 7. Ejecuta la función una vez para que no espere un segundo para mostrar
+      updateTimer();
+      
+      // 8. Configura el temporizador para que se actualice cada segundo
+      const intervalId = setInterval(updateTimer, 1000);
+    });
+  </script>

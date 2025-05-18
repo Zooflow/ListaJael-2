@@ -1,0 +1,24 @@
+@keyframes textShine {
+    0% {
+      background-position: 0% 50%;
+    }
+    100% {
+      background-position: 100% 50%;
+    }
+  }
+  
+  .text-shine {
+    background: linear-gradient(
+      to right,
+      #9b2d45 20%,
+      #eb0518 30%,
+      #ff024e 70%,
+      #ff7fa5 80%
+    );
+    background-size: 500% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    animation: textShine 5s ease-in-out infinite alternate;
+  }
